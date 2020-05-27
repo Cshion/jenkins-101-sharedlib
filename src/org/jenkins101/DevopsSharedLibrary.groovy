@@ -27,6 +27,19 @@ class DevopsSharedLibrary implements Serializable {
 
 
     def deployApplication(){
-        //runMvnTask("",parameters);
+        def appName    = context.steps.sh(script: "mvn -q -N org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='\${project.artifactId}'", returnStdout: true).trim()
+        def appVersion = context.steps.sh(script: "mvn -q -N org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='\${project.version}'", returnStdout: true).trim()
+        def jarPath    = "target/${appName}-${appVersion}.jar"
+        
+        context.steps.sh "docker build --no-cache --build-arg JAR_FILE_PATH=${jarPath} -t demo/${appName}:${appVersion} ."
+
+        //Simulacion de despliegue
+        try{
+            context.steps.sh "docker stop ${appName}-${appVersion}"
+        }catch(e){
+            context.steps.echo "$e"
+        }
+        
+        context.steps.sh "docker run --name ${appName}-${appVersion} -d -p 9966:9966 demo/${appName}:${appVersion}"
     }
 }
