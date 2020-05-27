@@ -35,12 +35,12 @@ class DevopsSharedLibrary implements Serializable {
 
         //Simulacion de despliegue
         try{
-            context.steps.sh "docker stop ${appName}-${appVersion}"
-            context.steps.sh "docker rm ${appName}-${appVersion}"
+            context.steps.sh "docker stop ${appName}"
+            context.steps.sh "docker rm ${appName}"
         }catch(e){
             context.steps.echo "$e"
         }
         
-        context.steps.sh "docker run --name ${appName}-${appVersion} -d -p 9966:9966 demo/${appName}:${appVersion}"
+        context.steps.sh "docker run --name ${appName} -d -p 9966:9966 demo/${appName}:${appVersion}"
     }
 }
