@@ -1,0 +1,1 @@
+Ejemplo de libreria compartida para la demo de Jenkins Pipelines101
