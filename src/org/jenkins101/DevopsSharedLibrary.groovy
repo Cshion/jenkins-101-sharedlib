@@ -34,12 +34,10 @@ class DevopsSharedLibrary implements Serializable {
         context.steps.sh "docker build --no-cache --build-arg JAR_FILE_PATH=${jarPath} -t demo/${appName}:${appVersion} ."
 
         //Simulacion de despliegue
-        try{
-            context.steps.sh "docker stop ${appName}"
-            context.steps.sh "docker rm ${appName}"
-        }catch(e){
-            context.steps.echo "$e"
-        }
+        
+        context.steps.sh "docker stop ${appName} || true"
+        context.steps.sh "docker rm ${appName} || true "
+        
         
         context.steps.sh "docker run --name ${appName} -d -p 9966:9966 demo/${appName}:${appVersion}"
     }
