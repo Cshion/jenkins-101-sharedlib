@@ -11,17 +11,17 @@ class DevopsSharedLibrary implements Serializable {
     }
 
     def build(){
-        sh "mvn -B -DskipTests clean package"
+        context.steps.sh "mvn -B -DskipTests clean package"
     }
 
     def unitTest(){
         try{
-            context.sh "mvn test"
+            context.steps.sh "mvn test"
         }catch(e){
             throw e
         }finally{
-            junit 'target/surefire-reports/TEST-*.xml'
-            jacoco()
+            context.steps.junit 'target/surefire-reports/TEST-*.xml'
+            context.steps.jacoco()
         }
     }
 
